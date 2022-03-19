@@ -1,0 +1,268 @@
+
+
+.container{
+    min-width: 100vw;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+  grid-template-areas: 
+  "header header header header header"
+  "header header header header header"
+  "sidebar maincontent maincontent maincontent maincontent"
+  "sidebar maincontent maincontent maincontent maincontent"
+  "sidebar maincontent maincontent maincontent maincontent"
+  "sidebar maincontent maincontent maincontent maincontent"
+  "sidebar maincontent maincontent maincontent maincontent"
+  "sidebar maincontent maincontent maincontent maincontent"
+  "sidebar maincontent maincontent maincontent maincontent"
+  "sidebar maincontent maincontent maincontent maincontent"
+  ;
+}
+
+.header{
+    background-color: rgb(71, 71, 71);
+    grid-area: header;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 2rem;
+    font-size: 1.3rem;
+}
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+
+
+.sidebar{
+    grid-area: sidebar;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    justify-content: flex-start;
+    background-color: rgb(175, 175, 175);
+}
+
+.maincontent{
+    grid-area: maincontent;
+    
+}
+
+.deleteprojectsection{
+    
+    display: flex;
+    justify-content: center;
+    padding: 3rem;
+}
+
+.deleteprojectsection button{
+    background-color: red;
+    color: white;
+    font-size: 1.5rem;
+    padding: 0.5rem 1.2rem;
+    font-weight: bolder;
+    border-radius: 2rem;
+    box-shadow: 5px 5px 10px grey;
+}
+
+.deleteprojectsection button:hover{
+    background-color: rgb(209, 0, 0);
+    cursor: pointer;
+}
+
+.deleteprojectsection button:active{
+    background-color: rgb(255, 0, 0);
+    
+}
+
+.addingprojectssection{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    flex: 1;
+    gap: 0.5rem;
+    margin: 0.5rem;
+}
+
+.addingprojectssection input,
+.addingprojectssection button{
+    padding: 0.5rem;
+    cursor: pointer;
+    background-color: white;
+    
+    box-shadow: 5px 5px 10px grey;
+}
+
+.addingprojectssection input{
+    
+    border-radius: 2rem;
+}
+
+.addingprojectssection button{
+   border-radius: 50%;
+   font-weight: bolder;
+   color: rgb(73, 73, 73);
+   transition: all 0.3s ease;
+}
+
+.addingprojectssection button:hover{
+    color: rgb(0, 0, 0);
+    background-color: rgb(206, 206, 206);
+ }
+
+ .addingprojectssection button:active{
+    color: rgb(0, 0, 0);
+    background-color: white;
+ }
+
+
+.projects{
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5rem;
+    gap: 2rem;
+    align-items: center;
+    justify-content: flex-start;
+    
+}
+
+.projects div{
+    border: 2px solid black;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    cursor: pointer;
+}
+.projects div:hover{
+    color: white;
+}
+
+.projects div:active{
+    color: grey;
+}
+
+.maincontent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+}
+
+.tabs{
+    width: 100%;
+    border: 2px solid black;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(auto-fit, 1fr);
+    background-color: white;
+    
+    justify-items: center;
+    padding: 2rem;
+   
+}
+
+.tabs div{
+    background-color: grey;
+    border-radius: 1rem;
+    
+
+    justify-content: flex-start;
+    align-items: center;
+    height: fit-content;
+    width: fit-content;
+    padding: 1rem;
+    border-left: 1rem solid black;
+    box-shadow: 5px 5px 15px grey;
+    gap: 1.2rem;
+}
+
+.tabs button{
+    color: rgb(41, 41, 41);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: 4rem;
+   height: fit-content;
+   padding: 0.3rem;
+   border-radius: 1rem;
+ }
+
+ .tabs input{
+     height: 1.5rem;
+     border-radius: 1rem;
+     padding-left: 1rem;
+
+ }
+ 
+ .tabs button:hover{
+     color: rgb(0, 0, 0);
+     background-color: rgb(206, 206, 206);
+  }
+ 
+  .tabs button:active{
+     color: rgb(0, 0, 0);
+     background-color: white;
+  }
+
+ .active{
+    display: flex;
+     color: white;
+ }
+
+ .disabled{
+     display: none;
+ }
+
+
+.taskform.displaytab{
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: orange;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.507);
+}
+
+.taskform.displaytab div {
+    background-color: rgb(78, 78, 78);
+    width: 50rem;
+    height: 10rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 2rem;
+    padding: 2rem;
+    color: white;
+    
+}
+
+.taskform.displaytab div button{
+    width: 100%;
+    height: 50%;
+    font-size: 2rem;
+    border: 2px solid black;
+}
+
+.taskform.displaytab div button:hover{
+    cursor: pointer;
+}
+
+
+.taskform.displaytab input{
+    min-width: 30rem;
+    max-width: fit-content;
+    font-size: 2rem;
+    border: 2px solid black;
+}
