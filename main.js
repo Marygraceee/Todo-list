@@ -6,10 +6,24 @@ let projectNameInput = document.getElementById("projectname")
 projectNameInput.value = ""
 let addProjectBtn = document.getElementById("addprojectbtn")
 let deleteProjectBtn = document.getElementById("deleteprojectbtn")
-
 let projects = Array.from(projectsContainer.children)
 let tabs = Array.from(tabsContainer.children)
+let projectsStorageArray = []
+let tasksStorageArray = []
 
+// creating the object contructor for a project
+
+function Project(name){
+    this.name = name;
+}
+
+// creating the object constructor for tasks
+
+function Tasks(name, content){
+    
+    this.name = name;
+    this.content = content;
+}
 
 
 // 1. Iterating through the arrays, to select a specific project and tab
@@ -31,8 +45,7 @@ function selectProject(){
                     project.classList.add("active")
                     tab.classList.add("active")
                     tab.classList.remove("disabled")
-                    console.log(projects.indexOf(project))
-                    console.log(tabs.indexOf(tab))
+                    
                     
                 }
             })
@@ -64,6 +77,10 @@ function addProject(){
  }
  
  else {
+     // creating a project object and appending it to the array that will be saved in localStorage
+let newProjectObject = new Project(`${projectNameInput.value}`)
+    projectsStorageArray.push(newProjectObject)
+    localStorage.setItem("projects", JSON.stringify(projectsStorageArray))
 // Create the new tab
 let newTab = document.createElement("div")
 // creating and appending the button, the input and the delete button to the tab
@@ -107,7 +124,9 @@ function deleteProject(){
    
     projects.forEach((project)=>{
         if (project.classList.contains("active")){
-            
+            console.log(projects.indexOf(project))
+            projectsStorageArray.splice(projects.indexOf(project), 1)
+            localStorage.setItem("projects", JSON.stringify(projectsStorageArray))
             project.remove()
             projects = Array.from(projectsContainer.children)
             
@@ -132,16 +151,29 @@ function addTask(){
     for (let i = newTaskBtn.length - 1; i < newTaskBtn.length; i++){
         newTaskBtn[i].addEventListener("click", ()=>{
             if (newTaskBtn[i].nextSibling.value !== ""){
+
+
                 
                 let newTask = document.createElement("div")
                 newTask.textContent = newTaskBtn[i].nextSibling.value
                 newTask.className = `${i}`
+                // saving the task to local storage
+                
+               let newTaskObject = new Tasks(`${newTaskBtn[i].parentElement.parentElement.classList[0]}`, `${newTask.textContent}`)
+               tasksStorageArray.push(newTaskObject)
+               localStorage.setItem(`tasks`, JSON.stringify(tasksStorageArray))
+                
+                
+                // -------------------------------------------------------------
                 let deleteTaskBtn = document.createElement("button")
                 deleteTaskBtn.classList.add("deleteTaskBtn")
                 deleteTaskBtn.textContent = "Delete"
                 newTask.append(deleteTaskBtn)
                 newTaskBtn[i].parentElement.parentElement.append(newTask)
                 newTaskBtn[i].nextSibling.value = ""
+
+                
+
                 deleteTask()
             }
             else {
@@ -155,18 +187,7 @@ function addTask(){
 }
  
 
-/*newTaskBtn.forEach((button)=>{
-    button.addEventListener("click", ()=>{
-        console.log(button.nextSibling.value)
-        
-    }) */
 
-
-   /* for (let i = newTaskBtn.length - 1; i < newTaskBtn.length; i++){
-        newTaskBtn[i].addEventListener("click", ()=>{
-            console.log(newTaskBtn[i].nextSibling.value)
-        })
-    }*/
 
 
 
@@ -176,16 +197,130 @@ function addTask(){
     function deleteTask(){
         let deleteTaskBtn = document.querySelectorAll(".deleteTaskBtn")
     
-
+if (deleteTaskBtn.length > 0){
     for (let i = deleteTaskBtn.length - 1; i < deleteTaskBtn.length; i++){
         deleteTaskBtn[i].addEventListener("click", ()=>{
+            let actualTask = deleteTaskBtn[i].parentElement.parentElement
+          console.log(actualTask)
             
-                console.log(deleteTaskBtn[i])
-                console.log(deleteTaskBtn[i].parentElement)
-                deleteTaskBtn[i].parentElement.remove(deleteTaskBtn[i])
+            tasksStorageArray.forEach((task)=>{
+                if (task.name === actualTask.classList[0]){
+                    console.log(actualTask)
+                    console.log(task)
+                    console.log(tasksStorageArray)
+                    tasksStorageArray.splice(tasksStorageArray.indexOf(task), 1)
+                    console.log(tasksStorageArray)
+                    localStorage.setItem("tasks", JSON.stringify(tasksStorageArray))
+                    
+                }
+            deleteTaskBtn[i].parentElement.remove(deleteTaskBtn[i])
+            
+            })
+               
         })
     }
 }
+    
+}
         
             
-   
+   // get "projects" from local storage, and for each project create a project dom element with the right name
+
+   function renderLocalStorageProjects(){
+    let newProjectsLocalStorageArray = JSON.parse(localStorage.getItem("projects") || "[]");
+    projectsStorageArray = newProjectsLocalStorageArray
+    if (localStorage.projects !== "[]"){
+        projectsStorageArray = newProjectsLocalStorageArray
+        newProjectsLocalStorageArray.forEach((project)=>{
+            
+
+            // Create the new project
+        
+ let newProject = document.createElement("div")
+ newProject.textContent = project.name
+ newProject.className = `${project.name}`
+
+// Create the new tab
+
+let newTab = document.createElement("div")
+
+// creating and appending the button, the input and the delete button to the tab
+
+let newTask = document.createElement("div")
+let newTaskButton = document.createElement("button")
+newTaskButton.textContent = "Add task"
+newTaskButton.classList.add("addTaskBtn")
+let newTaskInput = document.createElement("input")
+newTaskInput.classList.add("addTaskInput")
+
+newTask.append(newTaskButton, newTaskInput)
+newTab.append(newTask)
+// -----------------------------------------------------------
+
+newTab.className = `${project.name} disabled` 
+// adding the new project and the new tab to the containers
+tabsContainer.append(newTab)
+projectsContainer.appendChild(newProject)
+// adding the new project and tab to the arrays, in order to make the "selectProject" function work
+projects = Array.from(projectsContainer.children)
+tabs = Array.from(tabsContainer.children)
+projectNameInput.value = ""
+selectProject()
+addTask()
+
+
+
+
+
+
+
+
+
+
+        })
+    }
+   }
+
+   renderLocalStorageProjects()
+
+
+
+   // get "tasks" from localStorage and assign them to the corrent "projects", then render them in the page wwhen you refresh
+
+   function renderTasks(){
+    let newTasksStorageArray = JSON.parse(localStorage.getItem("tasks") || "[]");
+    console.log(newTasksStorageArray)
+    tasksStorageArray = newTasksStorageArray
+    if (localStorage.tasks !== "[]"){
+        tasksStorageArray = newTasksStorageArray
+        tabs.forEach((tab)=>{
+            
+            newTasksStorageArray.forEach((task)=>{
+                if (task.name === tab.classList[0]){
+                    
+                    //creating the task
+                    let newTask = document.createElement("div")
+                    newTask.textContent = task.content
+                    newTask.className = task.name
+                    //creating the delete button
+                    let deleteTaskBtn = document.createElement("button")
+                deleteTaskBtn.classList.add("deleteTaskBtn")
+                deleteTaskBtn.textContent = "Delete"
+                newTask.append(deleteTaskBtn)
+                // appending to the correct place
+                tab.append(newTask)
+                deleteTask()
+                console.log(tab)
+                }
+            })
+        })
+    }
+
+
+
+
+
+
+   }
+
+   renderTasks()
