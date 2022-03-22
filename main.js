@@ -124,7 +124,7 @@ function deleteProject(){
    
     projects.forEach((project)=>{
         if (project.classList.contains("active")){
-            console.log(projects.indexOf(project))
+            
             projectsStorageArray.splice(projects.indexOf(project), 1)
             localStorage.setItem("projects", JSON.stringify(projectsStorageArray))
             project.remove()
@@ -142,6 +142,7 @@ function deleteProject(){
             }
             })
 }
+
     // 4. within a specific tab, you can add tasks to it
 
 function addTask(){
@@ -150,34 +151,37 @@ function addTask(){
 
     for (let i = newTaskBtn.length - 1; i < newTaskBtn.length; i++){
         newTaskBtn[i].addEventListener("click", ()=>{
-            if (newTaskBtn[i].nextSibling.value !== ""){
+            if (newTaskBtn[i].nextSibling.value === ""){
 
-
+                console.log(newTaskBtn[i].nextSibling.value)
+                alert("Insert a task description, you can't have an empty task!")
                 
-                let newTask = document.createElement("div")
-                newTask.textContent = newTaskBtn[i].nextSibling.value
-                newTask.className = `${i}`
+               
+            }
+            else {
                 // saving the task to local storage
                 
-               let newTaskObject = new Tasks(`${newTaskBtn[i].parentElement.parentElement.classList[0]}`, `${newTask.textContent}`)
+               let newTaskObject = new Tasks(`${newTaskBtn[i].parentElement.parentElement.classList[0]}`, `${newTaskBtn[i].nextSibling.value}`)
                tasksStorageArray.push(newTaskObject)
                localStorage.setItem(`tasks`, JSON.stringify(tasksStorageArray))
                 
-                
+            
                 // -------------------------------------------------------------
+                let newTask = document.createElement("div")
+                newTask.textContent = newTaskBtn[i].nextSibling.value
+                newTask.className = `${newTaskBtn[i].parentElement.parentElement.classList[0]}`
                 let deleteTaskBtn = document.createElement("button")
                 deleteTaskBtn.classList.add("deleteTaskBtn")
-                deleteTaskBtn.textContent = "Delete"
+                deleteTaskBtn.innerText = "Delete"
                 newTask.append(deleteTaskBtn)
                 newTaskBtn[i].parentElement.parentElement.append(newTask)
                 newTaskBtn[i].nextSibling.value = ""
 
-                
-
                 deleteTask()
-            }
-            else {
-                alert("Insert a task description, you can't have an empty task!")
+               
+                
+                
+                
             }
         
             
@@ -186,44 +190,7 @@ function addTask(){
     
 }
  
-
-
-
-
-
-
-    // 5. within a specific tab, you can delete a single task.
-
-    function deleteTask(){
-        let deleteTaskBtn = document.querySelectorAll(".deleteTaskBtn")
-    
-if (deleteTaskBtn.length > 0){
-    for (let i = deleteTaskBtn.length - 1; i < deleteTaskBtn.length; i++){
-        deleteTaskBtn[i].addEventListener("click", ()=>{
-            let actualTask = deleteTaskBtn[i].parentElement.parentElement
-          console.log(actualTask)
-            
-            tasksStorageArray.forEach((task)=>{
-                if (task.name === actualTask.classList[0]){
-                    console.log(actualTask)
-                    console.log(task)
-                    console.log(tasksStorageArray)
-                    tasksStorageArray.splice(tasksStorageArray.indexOf(task), 1)
-                    console.log(tasksStorageArray)
-                    localStorage.setItem("tasks", JSON.stringify(tasksStorageArray))
-                    
-                }
-            deleteTaskBtn[i].parentElement.remove(deleteTaskBtn[i])
-            
-            })
-               
-        })
-    }
-}
-    
-}
-        
-            
+       
    // get "projects" from local storage, and for each project create a project dom element with the right name
 
    function renderLocalStorageProjects(){
@@ -267,21 +234,11 @@ tabs = Array.from(tabsContainer.children)
 projectNameInput.value = ""
 selectProject()
 addTask()
-
-
-
-
-
-
-
-
-
-
         })
     }
    }
-
-   renderLocalStorageProjects()
+renderLocalStorageProjects()
+   
 
 
 
@@ -289,7 +246,7 @@ addTask()
 
    function renderTasks(){
     let newTasksStorageArray = JSON.parse(localStorage.getItem("tasks") || "[]");
-    console.log(newTasksStorageArray)
+    
     tasksStorageArray = newTasksStorageArray
     if (localStorage.tasks !== "[]"){
         tasksStorageArray = newTasksStorageArray
@@ -309,18 +266,93 @@ addTask()
                 newTask.append(deleteTaskBtn)
                 // appending to the correct place
                 tab.append(newTask)
-                deleteTask()
-                console.log(tab)
+                
+                
                 }
             })
+            addTask()
+            deleteTask()
+                
         })
     }
-
-
-
-
-
-
+    
    }
 
-   renderTasks()
+renderTasks()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   // 5. within a specific tab, you can delete a single task.
+
+   document.addEventListener("click", (e)=>{
+    if (e.target.className === "deleteTaskBtn"){
+console.log(e.target.previousSibling.textContent)
+tasksStorageArray.forEach((task)=>{
+    if (e.target.previousSibling.textContent === task.content){
+        console.log("ciao")
+        e.target.parentElement.remove(e.target)
+        tasksStorageArray.splice(tasksStorageArray.indexOf(task), 1)
+        localStorage.setItem("tasks", JSON.stringify(tasksStorageArray))
+    }
+})
+      
+         
+    }   
+ })
+
+   function deleteTask(){
+    let deleteTaskBtn = document.querySelectorAll(".deleteTaskBtn")
+  console.log(deleteTaskBtn.length)
+
+ 
+ 
+
+/*
+  for (let i = deleteTaskBtn.length - 1; i < deleteTaskBtn.length; i++){
+      deleteTaskBtn[i].addEventListener("click",()=>{
+console.log(i)
+console.log("ciao")
+        
+          console.log(deleteTaskBtn[i].previousSibling.textContent)
+          deleteTaskBtn[i].parentElement.remove(deleteTaskBtn[i])
+          tasksStorageArray.splice(i, 1)
+         
+
+          
+          for (let i = tasksStorageArray.length - 1; i < tasksStorageArray.length; i++){
+              if (tasksStorageArray[i].content === deleteTaskBtn[i].previousSibling.textContent)
+              console.log(tasksStorageArray[i])
+              tasksStorageArray.splice(i, 1)
+                 
+     })
+  }
+  */
+}
+
+
+
+        /*
+        tasksStorageArray.forEach((task)=>{
+            if (task.name === actualTask.classList[0]){
+               
+                tasksStorageArray.splice(tasksStorageArray.indexOf(task), 1)
+                
+                localStorage.setItem("tasks", JSON.stringify(tasksStorageArray))
+                
+            }
+        deleteTaskBtn[i].parentElement.remove(deleteTaskBtn[i])
+        
+        })
+           */
