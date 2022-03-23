@@ -135,12 +135,23 @@ function deleteProject(){
 
         tabs.forEach((tab)=>{
             if (tab.classList.contains("active")){
+                tasksStorageArray.forEach((task)=>{
+                    let filteredItems = tasksStorageArray.filter( (task) => task.name !== tab.classList[0])
+                    tasksStorageArray = filteredItems
+                    console.log(tasksStorageArray)
+                    localStorage.setItem("tasks", JSON.stringify(tasksStorageArray))
+                })
+                
+                   
+
                 
                 tab.remove()
                 tabs = Array.from(tabsContainer.children)
+                console.log(tab)
                 
             }
             })
+        
 }
 
     // 4. within a specific tab, you can add tasks to it
@@ -191,7 +202,7 @@ function addTask(){
 }
  
        
-   // get "projects" from local storage, and for each project create a project dom element with the right name
+   // 6. get "projects" from local storage, and for each project create a project dom element with the right name
 
    function renderLocalStorageProjects(){
     let newProjectsLocalStorageArray = JSON.parse(localStorage.getItem("projects") || "[]");
@@ -242,7 +253,7 @@ renderLocalStorageProjects()
 
 
 
-   // get "tasks" from localStorage and assign them to the corrent "projects", then render them in the page wwhen you refresh
+   // 7. get "tasks" from localStorage and assign them to the corrent "projects", then render them in the page wwhen you refresh
 
    function renderTasks(){
     let newTasksStorageArray = JSON.parse(localStorage.getItem("tasks") || "[]");
@@ -314,45 +325,7 @@ tasksStorageArray.forEach((task)=>{
 
    function deleteTask(){
     let deleteTaskBtn = document.querySelectorAll(".deleteTaskBtn")
-  console.log(deleteTaskBtn.length)
-
+   }
  
  
 
-/*
-  for (let i = deleteTaskBtn.length - 1; i < deleteTaskBtn.length; i++){
-      deleteTaskBtn[i].addEventListener("click",()=>{
-console.log(i)
-console.log("ciao")
-        
-          console.log(deleteTaskBtn[i].previousSibling.textContent)
-          deleteTaskBtn[i].parentElement.remove(deleteTaskBtn[i])
-          tasksStorageArray.splice(i, 1)
-         
-
-          
-          for (let i = tasksStorageArray.length - 1; i < tasksStorageArray.length; i++){
-              if (tasksStorageArray[i].content === deleteTaskBtn[i].previousSibling.textContent)
-              console.log(tasksStorageArray[i])
-              tasksStorageArray.splice(i, 1)
-                 
-     })
-  }
-  */
-}
-
-
-
-        /*
-        tasksStorageArray.forEach((task)=>{
-            if (task.name === actualTask.classList[0]){
-               
-                tasksStorageArray.splice(tasksStorageArray.indexOf(task), 1)
-                
-                localStorage.setItem("tasks", JSON.stringify(tasksStorageArray))
-                
-            }
-        deleteTaskBtn[i].parentElement.remove(deleteTaskBtn[i])
-        
-        })
-           */
