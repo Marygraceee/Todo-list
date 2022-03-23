@@ -158,13 +158,16 @@ function deleteProject(){
 
 function addTask(){
     let newTaskBtn = document.querySelectorAll(".addTaskBtn")
-    console.log(newTaskBtn)
+    
     document.addEventListener("click", (e)=>{
+        
         if (e.target.className === "addTaskBtn"){
+        
             let currentAddTaskBtn = e.target
             if (currentAddTaskBtn.nextSibling.value === ""){
                 alert("You have to add a description to your task!")
             }
+            
             if (currentAddTaskBtn.nextSibling.value !== ""){
                 // creating the task object to save in local storage
                 let newTaskObject = new Tasks(`${currentAddTaskBtn.parentElement.parentElement.classList[0]}`, `${currentAddTaskBtn.nextSibling.value}`)
@@ -316,7 +319,7 @@ renderLocalStorageProjects()
                 }
             })
             
-            deleteTask()
+            
                 
         })
     }
@@ -341,25 +344,37 @@ renderTasks()
 
    // 5. within a specific tab, you can delete a single task.
 
-   document.addEventListener("click", (e)=>{
-    if (e.target.className === "deleteTaskBtn"){
-
-tasksStorageArray.forEach((task)=>{
-    if (e.target.previousSibling.textContent === task.content){
-        
-        e.target.parentElement.remove(e.target)
-        tasksStorageArray.splice(tasksStorageArray.indexOf(task), 1)
-        localStorage.setItem("tasks", JSON.stringify(tasksStorageArray))
-    }
-})
-      
-         
-    }   
- })
+   
 
    function deleteTask(){
     let deleteTaskBtn = document.querySelectorAll(".deleteTaskBtn")
+    document.addEventListener("click", (e)=>{
+        if (e.target.className === "deleteTaskBtn"){
+
+            let currentDeleteBtn = e.target
+
+            
+            currentDeleteBtn.parentElement.remove(currentDeleteBtn)
+
+
+
+    
+    for (let i = 0; i < tasksStorageArray.length; i++){
+        if (currentDeleteBtn.previousSibling.textContent === tasksStorageArray[i].content){
+            
+            console.log(tasksStorageArray[i])
+            console.log(tasksStorageArray.indexOf(tasksStorageArray[i]))
+            tasksStorageArray.splice(tasksStorageArray.indexOf(tasksStorageArray[i]), 1)
+            localStorage.setItem("tasks", JSON.stringify(tasksStorageArray))
+        }
+    }
+        
+    
+          
+          
+}
+     })
    }
  
- 
+ deleteTask()
 
