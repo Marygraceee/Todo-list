@@ -104,7 +104,7 @@ projects = Array.from(projectsContainer.children)
 tabs = Array.from(tabsContainer.children)
 projectNameInput.value = ""
 selectProject()
-addTask()
+
 
  }
         
@@ -138,7 +138,7 @@ function deleteProject(){
                 tasksStorageArray.forEach((task)=>{
                     let filteredItems = tasksStorageArray.filter( (task) => task.name !== tab.classList[0])
                     tasksStorageArray = filteredItems
-                    console.log(tasksStorageArray)
+                    
                     localStorage.setItem("tasks", JSON.stringify(tasksStorageArray))
                 })
                 
@@ -147,7 +147,7 @@ function deleteProject(){
                 
                 tab.remove()
                 tabs = Array.from(tabsContainer.children)
-                console.log(tab)
+                
                 
             }
             })
@@ -158,13 +158,45 @@ function deleteProject(){
 
 function addTask(){
     let newTaskBtn = document.querySelectorAll(".addTaskBtn")
-    
+    console.log(newTaskBtn)
+    document.addEventListener("click", (e)=>{
+        if (e.target.className === "addTaskBtn"){
+            let currentAddTaskBtn = e.target
+            if (currentAddTaskBtn.nextSibling.value === ""){
+                alert("You have to add a description to your task!")
+            }
+            if (currentAddTaskBtn.nextSibling.value !== ""){
+                // creating the task object to save in local storage
+                let newTaskObject = new Tasks(`${currentAddTaskBtn.parentElement.parentElement.classList[0]}`, `${currentAddTaskBtn.nextSibling.value}`)
+                tasksStorageArray.push(newTaskObject)
+                localStorage.setItem(`tasks`, JSON.stringify(tasksStorageArray))
+                // -------------------------------------------------
+
+                // Creating the task
+
+                let newTask = document.createElement("div")
+                newTask.textContent = currentAddTaskBtn.nextSibling.value
+                newTask.className = `${currentAddTaskBtn.parentElement.parentElement.classList[0]}`
+                let deleteTaskBtn = document.createElement("button")
+                deleteTaskBtn.classList.add("deleteTaskBtn")
+                deleteTaskBtn.innerText = "Delete"
+                newTask.append(deleteTaskBtn)
+                currentAddTaskBtn.parentElement.parentElement.append(newTask)
+                currentAddTaskBtn.nextSibling.value = ""
+
+
+
+            }
+        }
+    })
+    /*
 
     for (let i = newTaskBtn.length - 1; i < newTaskBtn.length; i++){
         newTaskBtn[i].addEventListener("click", ()=>{
+            console.log(newTaskBtn[i].parentElement.parentElement.classList)
             if (newTaskBtn[i].nextSibling.value === ""){
 
-                console.log(newTaskBtn[i].nextSibling.value)
+                
                 alert("Insert a task description, you can't have an empty task!")
                 
                
@@ -198,8 +230,10 @@ function addTask(){
             
         })
     }
+    */
     
 }
+addTask()
  
        
    // 6. get "projects" from local storage, and for each project create a project dom element with the right name
@@ -244,7 +278,7 @@ projects = Array.from(projectsContainer.children)
 tabs = Array.from(tabsContainer.children)
 projectNameInput.value = ""
 selectProject()
-addTask()
+
         })
     }
    }
@@ -281,7 +315,7 @@ renderLocalStorageProjects()
                 
                 }
             })
-            addTask()
+            
             deleteTask()
                 
         })
@@ -309,10 +343,10 @@ renderTasks()
 
    document.addEventListener("click", (e)=>{
     if (e.target.className === "deleteTaskBtn"){
-console.log(e.target.previousSibling.textContent)
+
 tasksStorageArray.forEach((task)=>{
     if (e.target.previousSibling.textContent === task.content){
-        console.log("ciao")
+        
         e.target.parentElement.remove(e.target)
         tasksStorageArray.splice(tasksStorageArray.indexOf(task), 1)
         localStorage.setItem("tasks", JSON.stringify(tasksStorageArray))
